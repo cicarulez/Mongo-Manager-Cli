@@ -1,0 +1,40 @@
+{
+  "name": "mongo-manager",
+  "version": "1.0.0",
+  "description": "This script is a Node.js application that facilitates MongoDB database operations such as user management and data export. It provides an interactive command-line interface (CLI) for creating, deleting, and updating user passwords, as well as exporting data from a MongoDB collection.",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "cross-env ENV_FILE=.env.development node index.js",
+    "start:prod": "node index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.7",
+    "mongoose": "^8.8.4"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cicarulez/mongo-manager.git"
+  },
+  "keywords": [
+    "mongodb",
+    "cli-tool",
+    "user-management",
+    "data-export",
+    "nodejs",
+    "mongoose",
+    "bcrypt",
+    "json-dump",
+    "environment-variables",
+    "mongodb-cli"
+  ],
+  "author": "Davide Cappa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cicarulez/mongo-manager/issues"
+  },
+  "homepage": "https://github.com/cicarulez/mongo-manager#readme"
+}
