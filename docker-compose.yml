@@ -1,10 +1,18 @@
 services:
-  app:
+  mongo_manager_app:
     image: mongo_manager_image
     container_name: mongo_manager_app
-    environment:
-      - MONGO_URL=${MONGO_URL}
-      - DATA_COLLECTION_NAME=${DATA_COLLECTION_NAME}
-      - USER_COLLECTION_NAME=${USER_COLLECTION_NAME}
-    stdin_open: true
     tty: true
+    stdin_open: true
+    env_file: ./src/.env
+    volumes:
+      - ./src/exports:/usr/src/app/exports
+    networks:
+      - shared-network
+
+volumes:
+  exports:
+
+networks:
+  shared-network:
+    external: true
