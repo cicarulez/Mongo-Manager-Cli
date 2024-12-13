@@ -67,7 +67,7 @@ This script is a Node.js application that facilitates MongoDB database operation
    ```
 2. Run the container:
    ```bash
-   docker run --tty --interactive --name mongo_manager_app --rm -v exports:/app/exports --env-file src/.env mongo_manager_image
+   docker run --tty --interactive --name mongo_manager_app --rm -v exports:/usr/src/app/exports --env-file src/.env mongo_manager_image
    ```
 
 ### Using Docker Compose
