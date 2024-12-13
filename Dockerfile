@@ -4,7 +4,7 @@
 FROM node:lts-alpine
 
 # Set working directory
-WORKDIR /usr/src/app
+WORKDIR /usr/app
 
 # Copy package files and install dependencies
 COPY src/package*.json ./

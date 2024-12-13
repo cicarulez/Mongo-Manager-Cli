@@ -4,9 +4,9 @@ services:
     container_name: mongo_manager_app
     tty: true
     stdin_open: true
-    env_file: ./src/.env
+    env_file: ./envs/.env
     volumes:
-      - ./src/exports:/usr/src/app/exports
+      - ./exports:/usr/exports
     networks:
       - shared-network
 

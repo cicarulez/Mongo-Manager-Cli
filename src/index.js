@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const dotenv = require('dotenv');
 
-dotenv.config({ path: path.join(__dirname, process.env.ENV_FILE || '.env') });
+dotenv.config(process.env.ENV_FILE ? {path: path.join(__dirname, process.env.ENV_FILE)} : {});
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -16,7 +16,7 @@ const exitAliases = ['back', 'quit', 'stop', 'exit'];
 const MONGO_URL = process.env.MONGO_URL;
 const DATA_COLLECTION_NAME = process.env.DATA_COLLECTION_NAME;
 const USER_COLLECTION_NAME = process.env.USER_COLLECTION_NAME;
-const EXPORT_DIR = path.join(__dirname, 'exports');
+const EXPORT_DIR = path.join(__dirname, '../exports');
 
 if (!MONGO_URL || !DATA_COLLECTION_NAME || !USER_COLLECTION_NAME) {
     console.error(`❌ Environment variables MONGO_URL, DATA_COLLECTION_NAME, and USER_COLLECTION_NAME are required.`);
@@ -28,7 +28,6 @@ if (!MONGO_URL || !DATA_COLLECTION_NAME || !USER_COLLECTION_NAME) {
     console.log('=============================');
     console.log('✨ Application Configuration');
     console.log('=============================');
-    console.log(`🌍 Environment       : ${process.env.NODE_ENV || 'development'} (${process.env.ENV_FILE || '.env'})`);
     console.log(`📦 MongoDB URL       : ${MONGO_URL}`);
     console.log(`🗂 Data Collection   : ${DATA_COLLECTION_NAME}`);
     console.log(`👤 User Collection   : ${USER_COLLECTION_NAME}`);
@@ -88,13 +87,13 @@ async function handleCreateUser() {
         const username = await promptUser('Enter username for new user (or type "back" to return): ');
         if (exitAliases.includes(username.toLowerCase())) break;
 
-        const existingUser = await User.findOne({ username });
+        const existingUser = await User.findOne({username});
         if (existingUser) {
             console.log('⚠ User already exists.');
         } else {
             const plainPassword = await promptUser('Enter password for new user: ');
             const hashedPassword = await bcrypt.hash(plainPassword, 10);
-            await User.create({ username, password: hashedPassword });
+            await User.create({username, password: hashedPassword});
             console.log('✅ User created successfully.');
         }
     }
@@ -105,11 +104,11 @@ async function handleDeleteUser() {
         const username = await promptUser('Enter username of the user to delete (or type "back" to return): ');
         if (exitAliases.includes(username.toLowerCase())) break;
 
-        const existingUser = await User.findOne({ username });
+        const existingUser = await User.findOne({username});
         if (!existingUser) {
             console.log('⚠ User does not exist.');
         } else {
-            await User.deleteOne({ username });
+            await User.deleteOne({username});
             console.log('✅ User deleted successfully.');
         }
     }
@@ -120,7 +119,7 @@ async function handleChangePassword() {
         const username = await promptUser('Enter username of the user to change password (or type "back" to return): ');
         if (exitAliases.includes(username.toLowerCase())) break;
 
-        const existingUser = await User.findOne({ username });
+        const existingUser = await User.findOne({username});
         if (!existingUser) {
             console.log('⚠ User does not exist.');
         } else {
@@ -140,7 +139,7 @@ async function handleDataExport() {
     const fileName = `${DATA_COLLECTION_NAME}_${timestamp}.json`;
     const filePath = path.join(EXPORT_DIR, fileName);
 
-    fs.mkdirSync(EXPORT_DIR, { recursive: true });
+    fs.mkdirSync(EXPORT_DIR, {recursive: true});
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
     console.log(`✅ Data exported to ${filePath}`);
 }
