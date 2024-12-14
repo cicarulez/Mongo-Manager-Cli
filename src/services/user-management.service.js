@@ -1,7 +1,8 @@
 const bcrypt = require('bcryptjs');
-const User = require('../models/user.model');
+const getUserModel = require('../models/user.model');
 
 async function createUser(username, password) {
+    const User = getUserModel();
     const existingUser = await User.findOne({username});
     if (existingUser) throw new Error(`User "${username}" already exists.`);
 
@@ -11,6 +12,7 @@ async function createUser(username, password) {
 }
 
 async function deleteUser(username) {
+    const User = getUserModel();
     const existingUser = await User.findOne({username});
     if (!existingUser) throw new Error(`User "${username}" does not exist.`);
 
@@ -19,6 +21,7 @@ async function deleteUser(username) {
 }
 
 async function changePassword(username, newPassword) {
+    const User = getUserModel();
     const existingUser = await User.findOne({username});
     if (!existingUser) throw new Error(`User "${username}" does not exist.`);
 
@@ -28,6 +31,7 @@ async function changePassword(username, newPassword) {
 }
 
 async function listUsers() {
+    const User = getUserModel();
     const users = await User.find({}, {username: 1, _id: 0});
     return users.map(user => user.username);
 }

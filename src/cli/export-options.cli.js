@@ -6,7 +6,7 @@ async function handleExportOptionsMenu(rl) {
     while (true) {
         console.clear();
         console.log('=============================');
-        console.log('🗂 Export Options');
+        console.log('🗂  Export Options');
         console.log('=============================');
         console.log(`📂 Current Collection: ${getConfig('DATA_COLLECTION_NAME')}`);
         console.log('=============================');

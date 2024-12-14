@@ -1,5 +1,5 @@
 const {promptUser} = require('./prompt-user.cli');
-const {setConfig} = require('../config/config');
+const {setConfig, getConfig} = require('../config/config');
 
 async function handleSettings(rl) {
     while (true) {
@@ -10,17 +10,14 @@ async function handleSettings(rl) {
 
         switch (choice) {
             case '1':
-                if (await modifyCollectionName(rl, 'USER_COLLECTION_NAME', 'User Collection')) return;
+                await modifyCollectionName(rl, 'USER_COLLECTION_NAME', 'User Collection');
                 break;
-
             case '2':
-                if (await modifyCollectionName(rl, 'DATA_COLLECTION_NAME', 'Data Collection')) return;
+                await modifyCollectionName(rl, 'DATA_COLLECTION_NAME', 'Data Collection');
                 break;
-
             case '3':
                 console.clear();
                 return;
-
             default:
                 console.log('⚠ Invalid option. Please try again.');
                 await promptUser(rl);
@@ -29,12 +26,13 @@ async function handleSettings(rl) {
 }
 
 async function modifyCollectionName(rl, configKey, label) {
+    console.log(`\nCurrent value for ${label}: ${getConfig(configKey)}`)
     while (true) {
         const newName = await promptUser(rl, `Enter the new ${label} name (or type "back" to return): `);
 
         if (newName.toLowerCase() === 'back') {
             console.clear();
-            return false; // Indicates to stay in settings
+            return;
         }
 
         if (!newName.trim()) {
@@ -45,7 +43,7 @@ async function modifyCollectionName(rl, configKey, label) {
         setConfig(configKey, newName.trim());
         console.log(`✅ ${label} updated to: ${newName}`);
         await promptUser(rl);
-        return true; // Indicates successful update
+        return;
     }
 }
 

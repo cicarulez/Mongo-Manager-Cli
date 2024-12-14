@@ -1,5 +1,6 @@
 const { createUser, deleteUser, changePassword, listUsers } = require('../services/user-management.service');
 const { promptUser } = require('./prompt-user.cli');
+const {getConfig} = require('../config/config');
 
 async function handleUserManagementMenu(rl) {
     let continueLoop = true;
@@ -28,7 +29,7 @@ async function handleUserManagementMenu(rl) {
                 continueLoop = false;
                 break;
             default:
-                console.log('⚠ Invalid option. Please try again.');
+                console.log('⚠  Invalid option. Please try again.');
                 await promptUser(rl, 'Press Enter to continue...');
         }
     }
@@ -47,7 +48,7 @@ async function handleCreateUser(rl) {
         }
 
         if (!username.trim()) {
-            console.log('⚠ Username cannot be empty. Please try again.');
+            console.log('⚠  Username cannot be empty. Please try again.');
             continue;
         }
 
@@ -56,7 +57,7 @@ async function handleCreateUser(rl) {
         try {
             console.log(await createUser(username, password));
         } catch (error) {
-            console.error(`❌ Error during user creation: ${error.message}`);
+            console.error(`❌  Error during user creation: ${error.message}`);
         }
 
         const nextAction = await promptUser(rl, 'Do you want to create another user? (yes/no): ');
@@ -80,7 +81,7 @@ async function handleDeleteUser(rl) {
         }
 
         if (!username.trim()) {
-            console.log('⚠ Username cannot be empty. Please try again.');
+            console.log('⚠  Username cannot be empty. Please try again.');
             continue;
         }
 
@@ -133,7 +134,7 @@ async function handleChangePassword(rl) {
 
 async function handleListUsers(rl) {
     try {
-        console.log('📋 Users:', await listUsers());
+        console.log('\n📋 Users:', await listUsers());
     } catch (error) {
         console.error(`❌ Error: ${error.message}`);
     }
@@ -143,6 +144,8 @@ async function handleListUsers(rl) {
 function displayUserManagementMenu() {
     console.log('=============================');
     console.log('👤 User Management');
+    console.log('=============================');
+    console.log(`📂 Current Collection: ${getConfig('USER_COLLECTION_NAME')}`);
     console.log('=============================');
     console.log('1. 📚 Create User');
     console.log('2. 🗑  Delete User');
