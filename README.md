@@ -1,15 +1,15 @@
 # MongoDB User Management and Data Export Script
 
-This Node.js application facilitates MongoDB database operations such as user management and data export. It provides an interactive CLI for creating, deleting, and updating user passwords, as well as exporting and listing data from a MongoDB collection.
+This Node.js application facilitates MongoDB database operations such as user management and data export. It provides an interactive CLI for creating, deleting, and updating user passwords (which are securely salted and hashed using `bcrypt`), as well as exporting and listing data from a MongoDB collection.
 
 ---
 
 ## Features
 
 ### 1. **User Management**
-- **Create User**: Add new users to the database.
+- **Create User**: Add new users to the database. Passwords are securely salted and hashed using `bcrypt` before storage.
 - **Delete User**: Remove users from the database.
-- **Change Password**: Update passwords for existing users.
+- **Change Password**: Update passwords for existing users. New passwords are securely salted and hashed using `bcrypt` before being updated in the database.
 - **List Users**: Display all registered users.
 
 ### 2. **Export Options**
