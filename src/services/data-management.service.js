@@ -21,7 +21,9 @@ async function exportData(collectionName) {
 function listExportedFiles() {
     if (!fs.existsSync(EXPORT_DIR)) return [];
 
-    return fs.readdirSync(EXPORT_DIR).filter(file => file.endsWith('.json'));
+    return fs.readdirSync(EXPORT_DIR).filter(file =>
+        file.endsWith('.json') || file.endsWith('.xlsx')
+    );
 }
 
 module.exports = {exportData, listExportedFiles};

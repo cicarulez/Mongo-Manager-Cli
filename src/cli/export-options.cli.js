@@ -22,42 +22,40 @@ async function handleExportOptionsMenu(rl) {
 
         const choice = await promptUser(rl, 'Choose an option: ');
 
-        if (!enableExcelExport) {
-            switch (choice) {
-                case '1':
-                    const filePath = await exportData(getConfig('DATA_COLLECTION_NAME'));
-                    console.log(`✅ Data exported to ${filePath}`);
-                    break;
-                case '2':
-                    const files = listExportedFiles();
-                    console.log('Exported Files:', files.length ? files : 'No exports found.');
-                    break;
-                case '3':
-                    console.clear();
-                    return;
-                default:
-                    console.log('⚠ Invalid option. Please try again.');
-            }
-        } else {
-            switch (choice) {
-                case '1':
-                    const exportDataPath = await exportData(getConfig('DATA_COLLECTION_NAME'));
-                    console.log(`✅ Data exported to ${exportDataPath}`);
-                    break;
-                case '2':
+        switch (choice) {
+            case '1':
+                const filePath = await exportData(getConfig('DATA_COLLECTION_NAME'));
+                console.log(`✅ Data exported to ${filePath}`);
+                break;
+            case '2':
+                if (enableExcelExport) {
                     await exportExcelData(getConfig('DATA_COLLECTION_NAME'));
-                    break;
-                case '3':
+                } else {
                     const files = listExportedFiles();
                     console.log('Exported Files:', files.length ? files : 'No exports found.');
-                    break;
-                case '4':
+                }
+                break;
+            case '3':
+                if (!enableExcelExport) {
+                    const files = listExportedFiles();
+                    console.log('Exported Files:', files.length ? files : 'No exports found.');
+                } else {
                     console.clear();
                     return;
-                default:
-                    console.log('⚠ Invalid option. Please try again.');
-            }
+                }
+                break;
+            case '4':
+                if (enableExcelExport) {
+                    console.clear();
+                    return;
+                }
+                // If not in Excel export mode, '4' is invalid
+                console.log('⚠ Invalid option. Please try again.');
+                break;
+            default:
+                console.log('⚠ Invalid option. Please try again.');
         }
+
 
         await promptUser(rl);
     }

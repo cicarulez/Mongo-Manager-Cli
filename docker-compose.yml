@@ -22,17 +22,16 @@ services:
     image: cicarulez/excel-json-converter:latest
     container_name: excel-json-converter
     environment:
-      - SWAGGER=true
       - PORT=3000
     restart: unless-stopped
     networks:
       - shared-network
       - internal-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/status/serverInfo"]
+      interval: 2s
+      timeout: 1s
+      retries: 10
 
 volumes:
   exports:

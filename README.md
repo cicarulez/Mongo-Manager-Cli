@@ -1,25 +1,34 @@
 # MongoDB User Management and Data Export Script
 
-This Node.js application facilitates MongoDB database operations such as user management and data export. It provides an interactive CLI for creating, deleting, and updating user passwords (which are securely salted and hashed using `bcrypt`), as well as exporting and listing data from a MongoDB collection, including exporting data to Excel using an external API.
+This Node.js application facilitates MongoDB database operations such as user management and data export. It provides an
+interactive CLI for creating, deleting, and updating user passwords (which are securely salted and hashed using
+`bcrypt`), as well as exporting and listing data from a MongoDB collection, including exporting data to Excel using an
+external API.
 
 ---
 
 ## Features
 
 ### 1. **User Management**
-- **Create User**: Add new users to the database. Passwords are securely salted and hashed using `bcrypt` before storage.
+
+- **Create User**: Add new users to the database. Passwords are securely salted and hashed using `bcrypt` before
+  storage.
 - **Delete User**: Remove users from the database.
-- **Change Password**: Update passwords for existing users. New passwords are securely salted and hashed using `bcrypt` before being updated in the database.
+- **Change Password**: Update passwords for existing users. New passwords are securely salted and hashed using `bcrypt`
+  before being updated in the database.
 - **List Users**: Display all registered users.
 
 ### 2. **Export Options**
+
 - **Export Data**: Export all documents from a specified collection into a JSON file.
-- **Export Data to Excel**: Export all documents from a specified collection to an Excel file using an external API (optional; requires additional repository).
+- **Export Data to Excel**: Export all documents from a specified collection to an Excel file using an external API (
+  optional; requires additional repository).
 - **Export Data**: Export all documents from a specified collection into a JSON file.
 - **Export Data to Excel**: Export all documents from a specified collection to an Excel file using an external API.
 - **List Exported Files**: View all previously exported files in the `exports` directory.
 
 ### 3. **Settings**
+
 - **Modify User Collection**: Change the name of the MongoDB collection used for user data.
 - **Modify Data Collection**: Change the name of the MongoDB collection used for exporting data.
 
@@ -28,7 +37,8 @@ This Node.js application facilitates MongoDB database operations such as user ma
 ## Requirements
 
 - **Node.js**: Version 14 or higher.
-- **Excel Export Dependency** (optional): If you want to enable Excel export, ensure you set up the external API from the repository [Excel-JSON-Converter-API](https://github.com/cicarulez/Excel-JSON-Converter-API).
+- **Excel Export Dependency** (optional): If you want to enable Excel export, ensure you set up the external API from
+  the repository [Excel-JSON-Converter-API](https://github.com/cicarulez/Excel-JSON-Converter-API).
 - **MongoDB**: Connection URI with a placeholder `<password>` for secure integration.
 - **Environment Variables**:
     - `MONGO_URL`: MongoDB connection URI.
@@ -61,7 +71,8 @@ This Node.js application facilitates MongoDB database operations such as user ma
       ENABLE_EXCEL_EXPORT=true
       CONVERTER_API_URL=http://localhost:3000/api/files/convertJsonToExcel
       ```
-    - Replace `<username>`, `<password>`, `data_collection_name`, and `user_collection_name` with your MongoDB credentials and collection names.
+    - Replace `<username>`, `<password>`, `data_collection_name`, and `user_collection_name` with your MongoDB
+      credentials and collection names.
 
 4. Run the application:
    ```bash
@@ -73,6 +84,7 @@ This Node.js application facilitates MongoDB database operations such as user ma
 ## Docker Setup
 
 ### Building and Running with Docker
+
 1. Build the Docker image:
    ```bash
    docker build -t mongo_manager_image .
@@ -83,6 +95,7 @@ This Node.js application facilitates MongoDB database operations such as user ma
    ```
 
 ### Using Docker Compose
+
 1. Create or edit the `.env` file as described above.
 2. Start the application with Docker Compose:
    ```bash
@@ -95,9 +108,25 @@ This Node.js application facilitates MongoDB database operations such as user ma
 
 ---
 
+### Starting the Containers Automatically (optional)
+
+To ensure both `excel-json-converter` and `mongo-manager-cli` containers are started correctly and in the right order,
+you can use the provided startup script. This script will automatically:
+
+1. Start the `excel-json-converter` service.
+2. Wait until the `excel-json-converter` service is fully ready by checking its custom health endpoint.
+3. Launch the `mongo-manager-cli` tty service.
+
+To run the script, simply execute:
+
+   ```bash
+    ./start-mongo-manager.sh
+   ```
+
 ## Usage
 
 ### Starting the Application
+
 1. When you start the script, you will be prompted to enter your MongoDB password.
 2. If the connection is successful, the main menu will be displayed:
    ```
@@ -111,24 +140,33 @@ This Node.js application facilitates MongoDB database operations such as user ma
    ```
 
 ### User Management
+
 - Select **1** to manage users. Submenu options:
-    - **Create User**: Enter a username and password to add a new user. After creation, you can opt to add another user by responding **yes**.
-    - **Delete User**: Provide a username to delete a user. After deletion, you can delete another user by responding **yes**.
-    - **Change Password**: Update an existing user's password. After updating, you can change another password by responding **yes**.
+    - **Create User**: Enter a username and password to add a new user. After creation, you can opt to add another user
+      by responding **yes**.
+    - **Delete User**: Provide a username to delete a user. After deletion, you can delete another user by responding *
+      *yes**.
+    - **Change Password**: Update an existing user's password. After updating, you can change another password by
+      responding **yes**.
     - **List Users**: View all registered users.
 
 ### Export Options
+
 - Select **2** to access the export options submenu:
     - **Export Data**: Export all documents from the specified collection to a JSON file.
-    - **Export Data to Excel**: Export all documents from the specified collection to an Excel file using an external API (only visible if `ENABLE_EXCEL_EXPORT=true` and requires the [Excel-JSON-Converter-API](https://github.com/cicarulez/Excel-JSON-Converter-API)).
+    - **Export Data to Excel**: Export all documents from the specified collection to an Excel file using an external
+      API (only visible if `ENABLE_EXCEL_EXPORT=true` and requires
+      the [Excel-JSON-Converter-API](https://github.com/cicarulez/Excel-JSON-Converter-API)).
     - **List Exported Files**: Display a list of previously exported files.
 
 ### Settings
+
 - Select **3** to modify collection names:
     - **Modify User Collection**: Change the name of the user collection used in MongoDB.
     - **Modify Data Collection**: Change the name of the data collection used for export.
 
 ### Exit
+
 - Select **4** to safely exit the application.
 
 ---
@@ -181,12 +219,18 @@ Defines the database schema:
 
 ## Keynotes
 
-- **Password Security**: User passwords are securely hashed using `bcrypt` with a salt to ensure high security before being stored or updated in the database.
-- **Excel Export**: Allows exporting data to an Excel file via an external API (requires the repository [Excel-JSON-Converter-API](https://github.com/cicarulez/Excel-JSON-Converter-API)), providing an additional format for data usage.
-- **Sequential Actions**: During user creation, deletion, or password updates, users can continue performing the same action sequentially by responding with "yes" or "y" to prompts, streamlining repetitive operations.
-- **Error Handling**: Proper validation ensures environment variables are set, and MongoDB connection issues are handled gracefully.
+- **Password Security**: User passwords are securely hashed using `bcrypt` with a salt to ensure high security before
+  being stored or updated in the database.
+- **Excel Export**: Allows exporting data to an Excel file via an external API (requires the
+  repository [Excel-JSON-Converter-API](https://github.com/cicarulez/Excel-JSON-Converter-API)), providing an additional
+  format for data usage.
+- **Sequential Actions**: During user creation, deletion, or password updates, users can continue performing the same
+  action sequentially by responding with "yes" or "y" to prompts, streamlining repetitive operations.
+- **Error Handling**: Proper validation ensures environment variables are set, and MongoDB connection issues are handled
+  gracefully.
 - **Interactive CLI**: Designed for ease of use with structured menus, clear prompts, and streamlined workflows.
-- **Graceful Shutdown**: The application ensures proper disconnection from MongoDB during shutdown or when receiving termination signals (e.g., `Ctrl+C`).
+- **Graceful Shutdown**: The application ensures proper disconnection from MongoDB during shutdown or when receiving
+  termination signals (e.g., `Ctrl+C`).
 
 ---
 
@@ -251,7 +295,8 @@ Defines the database schema:
 ## Troubleshooting
 
 1. **Error: Missing environment variables**
-    - Ensure all required variables (`MONGO_URL`, `DATA_COLLECTION_NAME`, `USER_COLLECTION_NAME`, `ENABLE_EXCEL_EXPORT`, `CONVERTER_API_URL`) are set in the `.env` file.
+    - Ensure all required variables (`MONGO_URL`, `DATA_COLLECTION_NAME`, `USER_COLLECTION_NAME`, `ENABLE_EXCEL_EXPORT`,
+      `CONVERTER_API_URL`) are set in the `.env` file.
 
 2. **Error: Failed to connect to MongoDB**
     - Verify that the `MONGO_URL` is correctly formatted and the database credentials are valid.
