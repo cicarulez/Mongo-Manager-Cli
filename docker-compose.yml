@@ -1,7 +1,7 @@
 services:
   mongo_manager_app:
-    image: mongo_manager_image
-    container_name: mongo_manager_app
+    image: cicarulez/mongo-manager:latest
+    container_name: mongo-manager
     tty: true
     stdin_open: true
     environment:
