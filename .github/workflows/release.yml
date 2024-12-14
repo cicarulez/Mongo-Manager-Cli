@@ -1,0 +1,38 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get previous tag
+        id: get_previous_tag
+        run: |
+          CURRENT_TAG=${GITHUB_REF_NAME#refs/tags/}
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^)
+          echo "current_tag=$CURRENT_TAG" >> $GITHUB_ENV
+          echo "previous_tag=$PREVIOUS_TAG" >> $GITHUB_ENV
+          echo "Previous tag: $PREVIOUS_TAG"
+          echo "Current tag: $CURRENT_TAG"
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ env.current_tag }}
+          release_name: Release ${{ env.current_tag }}
+          body: |
+            **Full Changelog**: https://github.com/cicarulez/Mongo-Manager-Cli/compare/${{ env.previous_tag }}...${{ env.current_tag }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
