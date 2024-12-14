@@ -13,8 +13,8 @@ const rl = readline.createInterface({
 });
 
 async function mainMenu() {
+    const enableExcelExport = getConfig('ENABLE_EXCEL_EXPORT') === 'true';
 
-    // console.clear();
     console.log('=============================');
     console.log('✨ Application Configuration');
     console.log(`🔖 Ver. ${version}`);
@@ -22,6 +22,10 @@ async function mainMenu() {
     console.log(`📦 MongoDB URL       : ${getConfig('MONGO_URL')}`);
     console.log(`🗂  Data Collection   : ${getConfig('DATA_COLLECTION_NAME')}`);
     console.log(`👤 User Collection   : ${getConfig('USER_COLLECTION_NAME')}`);
+    if (enableExcelExport) {
+        console.log('📊 Excel Export      : enabled');
+        console.log(`🚀 Converter Api     : ${getConfig('CONVERTER_API_URL')}`);
+    }
     console.log('=============================');
 
     const password = await promptUser(rl, 'Enter MongoDB password: ');

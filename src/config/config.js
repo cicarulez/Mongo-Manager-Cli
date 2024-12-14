@@ -6,6 +6,8 @@ let config = {
     DATA_COLLECTION_NAME: process.env.DATA_COLLECTION_NAME,
     USER_COLLECTION_NAME: process.env.USER_COLLECTION_NAME,
     EXPORT_DIR: path.join(__dirname, '../../exports'),
+    ENABLE_EXCEL_EXPORT: process.env.ENABLE_EXCEL_EXPORT || false,
+    CONVERTER_API_URL: process.env.CONVERTER_API_URL
 };
 
 // Getter for configuration

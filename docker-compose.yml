@@ -8,10 +8,24 @@ services:
       - MONGO_URL=mongodb://mongo:<password>@mongo-secure:27017/db_name?authSource=admin
       - DATA_COLLECTION_NAME=data
       - USER_COLLECTION_NAME=users
+      - ENABLE_EXCEL_EXPORT=true
+      - CONVERTER_API_URL=http://excel-json-converter:3000/api/files/convertJsonToExcel
     volumes:
       - ./exports:/usr/app/exports
     networks:
       - shared-network
+      - internal-network
+
+  excel-json-converter:
+    image: cicarulez/excel-json-converter:latest
+    container_name: excel-json-converter
+    environment:
+      - SWAGGER=true
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - shared-network
+      - internal-network
 
 volumes:
   exports:
@@ -19,3 +33,5 @@ volumes:
 networks:
   shared-network:
     external: true
+  internal-network:
+    driver: bridge
