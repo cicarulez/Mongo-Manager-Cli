@@ -22,40 +22,47 @@ async function handleExportOptionsMenu(rl) {
 
         const choice = await promptUser(rl, 'Choose an option: ');
 
+        const logExportedFiles = () => {
+            const files = listExportedFiles();
+            console.log('Exported Files:', files.length ? files : 'No exports found.');
+        };
+
         switch (choice) {
-            case '1':
+            case '1': {
                 const filePath = await exportData(getConfig('DATA_COLLECTION_NAME'));
                 console.log(`✅ Data exported to ${filePath}`);
                 break;
-            case '2':
+            }
+            case '2': {
                 if (enableExcelExport) {
                     await exportExcelData(getConfig('DATA_COLLECTION_NAME'));
                 } else {
-                    const files = listExportedFiles();
-                    console.log('Exported Files:', files.length ? files : 'No exports found.');
+                    logExportedFiles();
                 }
                 break;
-            case '3':
-                if (!enableExcelExport) {
-                    const files = listExportedFiles();
-                    console.log('Exported Files:', files.length ? files : 'No exports found.');
+            }
+            case '3': {
+                if (enableExcelExport) {
+                    logExportedFiles();
                 } else {
                     console.clear();
                     return;
                 }
                 break;
-            case '4':
+            }
+            case '4': {
                 if (enableExcelExport) {
                     console.clear();
                     return;
                 }
-                // If not in Excel export mode, '4' is invalid
+                // Invalid option for non-Excel export mode
                 console.log('⚠ Invalid option. Please try again.');
                 break;
-            default:
+            }
+            default: {
                 console.log('⚠ Invalid option. Please try again.');
+            }
         }
-
 
         await promptUser(rl);
     }

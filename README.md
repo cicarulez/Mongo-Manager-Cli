@@ -87,11 +87,11 @@ external API.
 
 1. Build the Docker image:
    ```bash
-   docker build -t mongo_manager_image .
+   docker build -t mongo-manager-cli .
    ```
 2. Run the container:
    ```bash
-   docker run --tty --interactive --name mongo_manager_app --rm -v exports:/usr/app/exports --env-file envs/.env mongo_manager_image
+   docker run --tty --interactive --name mongo-manager-cli --rm -v $(pwd)/exports:/usr/app/exports --env-file envs/.env.test mongo-manager-cli
    ```
 
 ### Using Docker Compose
@@ -99,7 +99,7 @@ external API.
 1. Create or edit the `.env` file as described above.
 2. Start the application with Docker Compose:
    ```bash
-   docker-compose run --rm mongo_manager_app
+   docker-compose run --rm mongo-manager-cli
    ```
 3. Access the application logs:
    ```bash
