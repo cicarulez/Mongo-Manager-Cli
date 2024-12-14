@@ -71,7 +71,7 @@ This Node.js application facilitates MongoDB database operations such as user ma
    ```
 2. Run the container:
    ```bash
-   docker run --tty --interactive --name mongo_manager_app --rm -v exports:/usr/exports --env-file envs/.env mongo_manager_image
+   docker run --tty --interactive --name mongo_manager_app --rm -v exports:/usr/app/exports --env-file envs/.env mongo_manager_image
    ```
 
 ### Using Docker Compose
