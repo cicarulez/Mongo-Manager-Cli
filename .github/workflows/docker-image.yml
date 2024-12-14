@@ -7,7 +7,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -17,16 +16,19 @@ jobs:
       - name: Build app and build Docker image
         run: |
           VERSION=${GITHUB_REF_NAME#v}
+          echo "Building Docker image with version $VERSION"
           docker build . --file Dockerfile --tag cicarulez/mongo-manager-cli:$VERSION
 
       - name: Tag Docker image as latest
         run: |
           VERSION=${GITHUB_REF_NAME#v}
+          echo "Tagging Docker image as latest"
           docker tag cicarulez/mongo-manager-cli:$VERSION cicarulez/mongo-manager-cli:latest
 
       - name: Publish Docker images to Docker Hub
         run: |
           VERSION=${GITHUB_REF_NAME#v}
+          echo "Publishing Docker image version $VERSION and latest"
           docker login -u cicarulez -p ${{ secrets.DOCKER_HUB_TOKEN }}
           docker push cicarulez/mongo-manager-cli:$VERSION
           docker push cicarulez/mongo-manager-cli:latest
