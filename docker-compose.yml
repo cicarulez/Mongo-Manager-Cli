@@ -1,7 +1,7 @@
 services:
-  mongo_manager_app:
-    image: cicarulez/mongo-manager:latest
-    container_name: mongo-manager
+  mongo-manager-cli:
+    image: cicarulez/mongo-manager-cli:latest
+    container_name: mongo-manager-cli
     tty: true
     stdin_open: true
     environment:
@@ -15,6 +15,8 @@ services:
     networks:
       - shared-network
       - internal-network
+    depends_on:
+      - excel-json-converter
 
   excel-json-converter:
     image: cicarulez/excel-json-converter:latest
@@ -26,6 +28,11 @@ services:
     networks:
       - shared-network
       - internal-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 volumes:
   exports:
