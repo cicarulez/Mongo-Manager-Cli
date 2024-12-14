@@ -9,7 +9,7 @@ services:
       - DATA_COLLECTION_NAME=data
       - USER_COLLECTION_NAME=users
     volumes:
-      - ./exports:/usr/exports
+      - ./exports:/usr/app/exports
     networks:
       - shared-network
 
