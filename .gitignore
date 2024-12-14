@@ -1,4 +1,4 @@
 /.idea
-/src/node_modules
+/node_modules
 /exports
 !/exports/.gitkeep

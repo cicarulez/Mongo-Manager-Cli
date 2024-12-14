@@ -1,19 +1,24 @@
 # MongoDB User Management and Data Export Script
 
-This script is a Node.js application that facilitates MongoDB database operations such as user management and data export. It provides an interactive command-line interface (CLI) for creating, deleting, and updating user passwords, as well as exporting and listing exported data from a MongoDB collection.
+This Node.js application facilitates MongoDB database operations such as user management and data export. It provides an interactive CLI for creating, deleting, and updating user passwords, as well as exporting and listing data from a MongoDB collection.
 
 ---
 
 ## Features
 
 ### 1. **User Management**
-- **Create User**: Add new users to the specified user collection.
+- **Create User**: Add new users to the database.
 - **Delete User**: Remove users from the database.
 - **Change Password**: Update passwords for existing users.
+- **List Users**: Display all registered users.
 
 ### 2. **Export Options**
-- **Export Data**: Export all documents from the specified data collection into a JSON file.
-- **List Data**: View all previously exported files.
+- **Export Data**: Export all documents from a specified collection into a JSON file.
+- **List Exported Files**: View all previously exported files in the `exports` directory.
+
+### 3. **Settings**
+- **Modify User Collection**: Change the name of the MongoDB collection used for user data.
+- **Modify Data Collection**: Change the name of the MongoDB collection used for exporting data.
 
 ---
 
@@ -45,13 +50,12 @@ This script is a Node.js application that facilitates MongoDB database operation
     - Create a `.env` file in the root of the project with the following variables:
       ```env
       MONGO_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/?retryWrites=true&w=majority
-      COLLECTION_NAME=data_collection_name
+      DATA_COLLECTION_NAME=data_collection_name
       USER_COLLECTION_NAME=user_collection_name
       ```
-    - Replace only `<username>`, `data_collection_name` and `user_collection_name` with your MongoDB credentials and collection name.
-    - Please do not replace `<password>`.
+    - Replace `<username>`, `<password>`, `data_collection_name`, and `user_collection_name` with your MongoDB credentials and collection names.
 
-4. Run the script:
+4. Run the application:
    ```bash
    npm run start:dev
    ```
@@ -86,63 +90,120 @@ This script is a Node.js application that facilitates MongoDB database operation
 ## Usage
 
 ### Starting the Application
-1. Upon starting, you will be prompted to enter your MongoDB password.
-2. If the connection is successful, you will see the main menu:
+1. When you start the script, you will be prompted to enter your MongoDB password.
+2. If the connection is successful, the main menu will be displayed:
    ```
    =============================
    🌐 Main Menu
    =============================
    1. 👤 User Management
    2. 📂 Export Options
-   3. ❌ Exit
+   3. ⚙️ Settings
+   4. ❌ Exit
    ```
 
 ### User Management
 - Select **1** to manage users. Submenu options:
-    - **Create User**: Enter a username and password to add a new user.
-    - **Delete User**: Provide a username to delete the user.
-    - **Change Password**: Provide a username and a new password to update the user's credentials.
-    - **Back to Main Menu**: Exit to the main menu.
+    - **Create User**: Enter a username and password to add a new user. After creation, you can opt to add another user by responding **yes**.
+    - **Delete User**: Provide a username to delete a user. After deletion, you can delete another user by responding **yes**.
+    - **Change Password**: Update an existing user's password. After updating, you can change another password by responding **yes**.
+    - **List Users**: View all registered users.
+
 
 ### Export Options
 - Select **2** to access the export options submenu:
-    - **Export Data**: Export all documents from the specified collection to a JSON file. The data will be saved in the `exports` directory with a timestamped filename.
-    - **List Data**: View all previously exported files in the `exports` directory.
+    - **Export Data**: Export all documents from the specified collection to a JSON file.
+    - **List Exported Files**: Display a list of previously exported files.
+
+### Settings
+- Select **3** to modify collection names:
+    - **Modify User Collection**: Change the name of the user collection used in MongoDB.
+    - **Modify Data Collection**: Change the name of the data collection used for export.
 
 ### Exit
-- Select **3** to safely exit the application.
+- Select **4** to safely exit the application.
 
 ---
 
-## Key Notes
+## Application Structure
 
-- **Password Security**: User passwords are securely hashed using `bcrypt` before storing in the database.
-- **Error Handling**: Validations ensure that required environment variables are set and MongoDB connection issues are logged.
-- **Interactive CLI**: Designed for ease of use with clear prompts and structured menus.
+The project is structured into clear, modular components to ensure scalability and maintainability.
+
+### 1. **Services** (`services/`)
+
+Contains core business logic:
+
+- `user-management.service.js`: Handles user creation, deletion, password updates, and listing.
+- `data-management.service.js`: Manages data export and lists exported files.
+
+### 2. **CLI** (`cli/`)
+
+Manages the user interface:
+
+- `main-menu.cli.js`: Displays the main menu and handles navigation.
+- `user-management.cli.js`: Implements user management operations via CLI.
+- `export-options.cli.js`: Implements data export and listing functionality.
+- `settings.cli.js`: Provides options to modify collection names via CLI.
+- `prompt-user.cli.js`: Handles reusable CLI prompts for user input.
+
+### 3. **Models** (`models/`)
+
+Defines the database schema:
+
+- `user.model.js`: Mongoose schema for the user collection.
+
+### 4. **Database Connection** (`db/`)
+
+- `db.js`: Handles MongoDB connection setup with password integration.
+
+### 5. **Configuration** (`config/`)
+
+- `config.js`: Provides getter and setter methods for managing environment configurations.
+
+### 6. **Utils** (`utils/`)
+
+- `validator.js`: Validates required environment variables before starting the application.
+
+### 7. **Entry Point**
+
+- `main.js`: Starts the application and initializes the main menu.
+
+---
+
+## Keynotes
+
+- **Password Security**: User passwords are securely hashed using `bcrypt` with a salt to ensure high security before being stored or updated in the database.
+- **Sequential Actions**: During user creation, deletion, or password updates, users can continue performing the same action sequentially by responding with "yes" or "y" to prompts, streamlining repetitive operations.
+- **Error Handling**: Proper validation ensures environment variables are set, and MongoDB connection issues are handled gracefully.
+- **Interactive CLI**: Designed for ease of use with structured menus, clear prompts, and streamlined workflows.
+- **Graceful Shutdown**: The application ensures proper disconnection from MongoDB during shutdown or when receiving termination signals (e.g., `Ctrl+C`).
 
 ---
 
 ## Example Workflow
 
-1. Run the script and connect to MongoDB:
+1. Start the script and enter the MongoDB password:
    ```bash
    Enter MongoDB password: ********
    ✅ Connected to MongoDB.
    ```
+
 2. Create a new user:
    ```
    👤 User Management
    =============================
-   1. 📚 Create User
+   1. 📓 Create User
    2. 🗑 Delete User
    3. 🔑 Change Password
-   4. ⬅ Back to Main Menu
+   4. 📋 List Users
+   5. ⬅ Back to Main Menu
 
    Choose an option: 1
    Enter username for new user: testuser
    Enter password for new user: password123
-   ✅ User created successfully.
+   ✅ User "testuser" successfully created.
    ```
+
 3. Export data:
    ```
    📂 Export Options
@@ -152,31 +213,39 @@ This script is a Node.js application that facilitates MongoDB database operation
    3. ⬅ Back to Main Menu
 
    Choose an option: 1
-   ✅ Data exported to ./exports/your_data_collection_2024-12-11T12-00-00.json
+   ✅ Data exported to ./exports/data_collection_name_2024-12-11T12-00-00.json
    ```
-4. List exported files:
-   ```
-   📂 Export Options
-   =============================
-   1. Export Data
-   2. List Data
-   3. ⬅ Back to Main Menu
 
-   Choose an option: 2
-   Exported Files:
-   1. your_data_collection_2024-12-11T12-00-00.json
-   ```
-5. Exit:
+4. Exit:
    ```
    ✅ Exiting...
    ```
 
 ---
 
+## Troubleshooting
+
+1. **Error: Missing environment variables**
+    - Ensure all required variables (`MONGO_URL`, `DATA_COLLECTION_NAME`, `USER_COLLECTION_NAME`) are set in the `.env` file.
+
+2. **Error: Failed to connect to MongoDB**
+    - Verify that the `MONGO_URL` is correctly formatted and the database credentials are valid.
+
+3. **Error: Collection name cannot be empty**
+    - If using the Settings menu, ensure that you provide a valid collection name when prompted.
+
+4. **Error during data export**
+    - Check if the `exports` directory is writable and there is sufficient disk space.
+
+---
+
 ## License
+
 This project is licensed under the **MIT License**. See the LICENSE file for details.
 
 ---
 
 ## Contributing
+
 Contributions are welcome! Please fork the repository and submit a pull request with your changes.
+

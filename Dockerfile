@@ -7,11 +7,11 @@ FROM node:lts-alpine
 WORKDIR /usr/app
 
 # Copy package files and install dependencies
-COPY src/package*.json ./
+COPY package*.json ./
 RUN npm install
 
 # Copy application source code
-COPY src/index.js .
+COPY src/ .
 
 # Default command to run the script
-CMD ["node", "index.js"]
+CMD ["npm", "run", "start:prod"]
