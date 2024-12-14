@@ -1,6 +1,6 @@
 {
   "name": "mongo-manager-cli",
-  "version": "2.5.4",
+  "version": "2.5.5",
   "description": "This Node.js application facilitates MongoDB database operations such as user management and data export. It provides an interactive CLI for creating, deleting, and updating user passwords (which are securely salted and hashed using `bcrypt`), as well as exporting and listing data from a MongoDB collection, including exporting data to Excel using an external API.",
   "main": "./src/main.js",
   "scripts": {
