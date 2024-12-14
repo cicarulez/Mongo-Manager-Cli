@@ -4,9 +4,11 @@ FROM node:lts-alpine
 # Set working directory
 WORKDIR /usr/app
 
-# Copy package files and install dependencies
+# Copy package.json and package-lock.json
 COPY package*.json ./
-RUN npm install
+
+# Install dependencies
+RUN npm install --verbose
 
 # Copy application source code
 COPY src/ src/.
