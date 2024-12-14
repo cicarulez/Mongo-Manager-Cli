@@ -5,7 +5,7 @@
   "main": "./src/main.js",
   "scripts": {
     "start:dev": "cross-env ENV_FILE=../envs/.env.development node ./src/main.js",
-    "start:prod": "node main.js"
+    "start:prod": "node ./src/main.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

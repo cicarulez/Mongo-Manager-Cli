@@ -4,7 +4,10 @@ services:
     container_name: mongo_manager_app
     tty: true
     stdin_open: true
-    env_file: ./envs/.env
+    environment:
+      - MONGO_URL=mongodb://mongo:<password>@mongo-secure:27017/db_name?authSource=admin
+      - DATA_COLLECTION_NAME=data
+      - USER_COLLECTION_NAME=users
     volumes:
       - ./exports:/usr/exports
     networks:
