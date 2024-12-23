@@ -39,6 +39,6 @@ jobs:
           tag_name: ${{ env.current_tag }}
           release_name: Release ${{ env.current_tag }}
           body: |
-            **Full Changelog**: https://github.com/cicarulez/Mongo-Manager-Cli/compare/${{ env.previous_tag }}...${{ env.current_tag }}
+            **Full Changelog**: ${{ github.server_url }}/${{ github.repository }}/compare/${{ env.previous_tag }}...${{ env.current_tag }}
           draft: false
           prerelease: false

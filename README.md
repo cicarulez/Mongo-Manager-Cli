@@ -142,8 +142,8 @@ To run the script, simply execute:
 ### User Management
 
 - Select **1** to manage users. Submenu options:
-    - **Create User**: Enter a username and password to add a new user. After creation, you can opt to add another user
-      by responding **yes**.
+    - **Create User**: Enter a username, password, first name, last name, and email to add a new user. After creation,
+      you can opt to add another user by responding **yes**.
     - **Delete User**: Provide a username to delete a user. After deletion, you can delete another user by responding *
       *yes**.
     - **Change Password**: Update an existing user's password. After updating, you can change another password by

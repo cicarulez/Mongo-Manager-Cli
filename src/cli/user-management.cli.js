@@ -1,5 +1,5 @@
-const { createUser, deleteUser, changePassword, listUsers } = require('../services/user-management.service');
-const { promptUser } = require('./prompt-user.cli');
+const {createUser, deleteUser, changePassword, listUsers} = require('../services/user-management.service');
+const {promptUser} = require('./prompt-user.cli');
 const {getConfig} = require('../config/config');
 
 async function handleUserManagementMenu(rl) {
@@ -48,16 +48,32 @@ async function handleCreateUser(rl) {
         }
 
         if (!username.trim()) {
-            console.log('⚠  Username cannot be empty. Please try again.');
+            console.log('⚠ Username cannot be empty. Please try again.');
             continue;
         }
 
-        const password = await promptUser(rl, 'Enter password: ');
+        let password = '';
+        while (true) {
+            password = await promptUser(rl, 'Enter password: ');
+            if (password.trim()) break;
+            console.log('⚠ Password cannot be empty. Please try again.');
+        }
+
+        const firstName = await promptUser(rl, 'Enter first name (optional): ');
+        const lastName = await promptUser(rl, 'Enter last name (optional): ');
+        const email = await promptUser(rl, 'Enter email (optional): ');
 
         try {
-            console.log(await createUser(username, password));
+            const user = {
+                username,
+                password,
+                firstName: firstName.trim() || undefined,
+                lastName: lastName.trim() || undefined,
+                email: email.trim() || undefined,
+            };
+            console.log(await createUser(user));
         } catch (error) {
-            console.error(`❌  Error during user creation: ${error.message}`);
+            console.error(`❌ Error during user creation: ${error.message}`);
         }
 
         const nextAction = await promptUser(rl, 'Do you want to create another user? (yes/no): ');
@@ -67,6 +83,7 @@ async function handleCreateUser(rl) {
         }
     }
 }
+
 
 async function handleDeleteUser(rl) {
     let continueLoop = true;
@@ -154,4 +171,4 @@ function displayUserManagementMenu() {
     console.log('5. ⬅  Back to Main Menu');
 }
 
-module.exports = { handleUserManagementMenu };
+module.exports = {handleUserManagementMenu};
